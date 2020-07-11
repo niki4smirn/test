@@ -2,7 +2,7 @@ def dist(x1, y1, x2, y2):
     return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
 
 
-def circle_intersection(x1, y1, r1, x2, y2, r2):
+def circles_intersection(x1, y1, r1, x2, y2, r2):
     d = dist(x1, y1, x2, y2)
     if d > r1 + r2 or d < r1 - r2 or not d:
         return None
@@ -35,6 +35,10 @@ def lines_intersection(line1, line2):
     return round(x), round(y)
 
 
+def circle_and_line_intersection(x, y, r, line):
+    pass
+
+
 def on_same_side(line, x1, y1, x2, y2):
     (a, b, c) = line.get_coefficients()
     return (a * x1 + b * y1 + c) * (a * x2 + b * y2 + c) > 0
@@ -44,7 +48,7 @@ def lines_from_point_to_circle(x1, y1, x2, y2, r):
     x3 = (x1 + x2) / 2
     y3 = (y1 + y2) / 2
     r2 = 0.5 * dist(x1, y1, x2, y2)
-    inter = circle_intersection(x2, y2, r, x3, y3, r2)
+    inter = circles_intersection(x2, y2, r, x3, y3, r2)
     if inter is not None:
         return (Line(x1=x1, y1=y1, x2=inter[0], y2=inter[1]),
                 Line(x1=x1, y1=y1, x2=inter[2], y2=inter[3]))
@@ -67,8 +71,10 @@ def move_to_circle(line1, x, y, r):
 
 
 def lines_from_circle_to_circle(x1, y1, r1, x2, y2, r2):
-    (line1, line2) = lines_from_point_to_circle(x2, y2, x1, y1, r1 - r2)  # outside
-    (line3, line4) = lines_from_point_to_circle(x2, y2, x1, y1, r1 + r2)  # inside
+    # outside
+    (line1, line2) = lines_from_point_to_circle(x2, y2, x1, y1, r1 - r2)
+    # inside
+    (line3, line4) = lines_from_point_to_circle(x2, y2, x1, y1, r1 + r2)
     line1 = move_to_circle(line1, x1, y1, r1)
     line2 = move_to_circle(line2, x1, y1, r1)
     line3 = move_to_circle(line3, x1, y1, r1)
