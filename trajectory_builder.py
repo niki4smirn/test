@@ -26,8 +26,18 @@ def lines_intersection(line1, line2):
     if b2 * a1 - b1 * a2 == 0:
         return None
     x = (b1 * c2 - b2 * c1) / (b2 * a1 - b1 * a2)
-    y = -(a1 * x + c1) / b1
-    return x, y
+    if b1 != 0:
+        y = -(a1 * x + c1) / b1
+    elif b2 != 0:
+        y = -(a2 * x + c2) / b2
+    else:
+        return None
+    return round(x), round(y)
+
+
+def on_same_side(line, x1, y1, x2, y2):
+    (a, b, c) = line.get_coefficients()
+    return (a * x1 + b * y1 + c) * (a * x2 + b * y2 + c) > 0
 
 
 def lines_from_point_to_circle(x1, y1, x2, y2, r):
